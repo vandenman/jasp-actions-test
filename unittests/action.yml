@@ -19,10 +19,12 @@ runs:
     - name: Install system dependencies on macOS
       if: runner.os == 'macOS'
       run: brew cask install xquartz
+      shell: bash
 
     - name: Clone jasp-required-files
       run: git clone --branch=${{ inputs.jaspRequiredFilesBranch }} https://github.com/jasp-stats/jasp-required-files.git pkgs
       working-directory: ..
+      shell: bash
 
     - name: Set R library path
       run: |
@@ -35,6 +37,7 @@ runs:
       run: |
         rm '/usr/local/bin/gfortran'
         brew install jags
+      shell: bash
 
     - name: Locate JAGS on Windows
       if: input.needsJAGS && runner.os == 'Windows'
