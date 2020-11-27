@@ -15,25 +15,22 @@ runs:
 # Once those are supported, we should probably use those instead of having if statements in bash & R. They're still commented out at the moment.
 #
 
-    - name: Script test
-      run: ${{ github.action_path }}/script.sh ${{ runner.os }} ${{ inputs.needsJAGS }}
-      shell: bash
-
     - name: Install system dependencies on macOS
       # if: runner.os == 'macOS'
       run: |
-        if [ "${{ runner.os }}" = 'macOS']; then
+        if [ "${{ runner.os }}" = 'macOS' ]; then
           brew cask install xquartz
         fi
       shell: bash
 
     - name: Clone jasp-required-files
       run: |
-        if [ "${{ runner.os }}" = 'macOS']; then
+        if [ "${{ runner.os }}" = 'macOS' ]; then
           branch='MacOS-Original'
         else
           branch='Windows'
         fi
+        echo "branch=$branch"
         git clone --branch=$branch https://github.com/jasp-stats/jasp-required-files.git pkgs
       working-directory: ..
       shell: bash
@@ -48,7 +45,7 @@ runs:
     - name: Install JAGS on macOS
       # if: inputs.needsJAGS && runner.os == 'macOS'
       run: |
-        if [ "${{ inputs.needsJAGS }}" = 'true'] && ["${{ runner.os }}" = 'macOS']; then
+        if [ "${{ inputs.needsJAGS }}" = 'true' ] && [ "${{ runner.os }}" = 'macOS' ]; then
           rm '/usr/local/bin/gfortran'
           brew install jags
         fi
