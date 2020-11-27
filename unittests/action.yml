@@ -1,5 +1,5 @@
-name: 'Hello World'
-description: 'Greet someone'
+name: 'set up unittests'
+description: 'downloads and installs R packages and system dependencies. Only works for Windows and macOS'
 inputs:
   needsJAGS:
     description: 'Should JAGS be available?'
@@ -54,7 +54,7 @@ runs:
     - name: Locate JAGS on Windows
       # if: inputs.needsJAGS && runner.os == 'Windows'
       run: |
-        if (.Platform$OS.type == "windows" && ${{ inputs.needsJAGS }} == "true") {
+        if (.Platform$OS.type == "windows" && "${{ inputs.needsJAGS }}" == "true") {
           path <- normalizePath(file.path("..", "pkgs", "64", "JAGS"), winslash = "/")
           cat("\nSys.setenv(JAGS_HOME = '", path, "')\n", file = "~/.Rprofile", sep = "", append = TRUE)
         }
