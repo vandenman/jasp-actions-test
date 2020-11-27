@@ -16,7 +16,7 @@ runs:
 #
 
     - name: Script test
-      run: ${{ github.action_path }}/script.sh
+      run: ${{ github.action_path }}/script.sh ${{ runner.os }} ${{ inputs.needsJAGS }}
       shell: bash
 
     - name: Install system dependencies on macOS
