@@ -17,8 +17,12 @@ runs:
   steps:
 
     - name: Install system dependencies on macOS
-      if: runner.os == 'macOS'
-      run: brew cask install xquartz
+      # if: runner.os == 'macOS'
+      run: |
+        if [ ${{ runner.os }} == 'macOS']
+        then
+          brew cask install xquartz
+        fi
       shell: bash
 
     - name: Clone jasp-required-files
@@ -28,22 +32,28 @@ runs:
 
     - name: Set R library path
       run: |
-        path <- normalizePath(file.path("..", "pkgs", "${{ input.libPath }}"), winslash = "/")
+        path <- normalizePath(file.path("..", "pkgs", "${{ inputs.libPath }}"), winslash = "/")
         cat("\n.libPaths(c('", path, "', .libPaths()))\n", file = "~/.Rprofile", sep = "", append = TRUE)
       shell: Rscript {0}
 
     - name: Install JAGS on macOS
-      if: input.needsJAGS && runner.os == 'macOS'
+      # if: inputs.needsJAGS && runner.os == 'macOS'
       run: |
-        rm '/usr/local/bin/gfortran'
-        brew install jags
+        echo $
+        if [ ${{ inputs.needsJAGS }} == 'true' && ${{ runner.os }} == 'macOS']
+        then
+          rm '/usr/local/bin/gfortran'
+          brew install jags
+        fi
       shell: bash
 
     - name: Locate JAGS on Windows
-      if: input.needsJAGS && runner.os == 'Windows'
+      # if: inputs.needsJAGS && runner.os == 'Windows'
       run: |
-        path <- normalizePath(file.path("..", "pkgs", "64", "JAGS"), winslash = "/")
-        cat("\nSys.setenv(JAGS_HOME = '", path, "')\n", file = "~/.Rprofile", sep = "", append = TRUE)
+        if (.Platform$OS.type == "windows" && ${{ inputs.needsJAGS }} == "true") {
+          path <- normalizePath(file.path("..", "pkgs", "64", "JAGS"), winslash = "/")
+          cat("\nSys.setenv(JAGS_HOME = '", path, "')\n", file = "~/.Rprofile", sep = "", append = TRUE)
+        }
       shell: Rscript {0}
 
     - name: Setup jaspTools
