@@ -16,11 +16,15 @@ runs:
   using: "composite"
   steps:
 
+# TODO (27-11-2020)
+# Composite steps don't allow if statements yet but will in the future (see https://github.com/actions/runner/blob/main/docs/adrs/0549-composite-run-steps.md#if-condition)
+# Once those are supported, we should probably use those instead of having if statements in bash & R. They're still commented out at the moment.
+#
+
     - name: Install system dependencies on macOS
       # if: runner.os == 'macOS'
       run: |
-        if [ ${{ runner.os }} == 'macOS']
-        then
+        if [ "${{ runner.os }}" = 'macOS']; then
           brew cask install xquartz
         fi
       shell: bash
@@ -32,6 +36,7 @@ runs:
 
     - name: Set R library path
       run: |
+        libPath <- if (.Platform$OS.type == "windows") "/R/library" else "/Frameworks/R.framework/Versions/3.6/Resources/library/"
         path <- normalizePath(file.path("..", "pkgs", "${{ inputs.libPath }}"), winslash = "/")
         cat("\n.libPaths(c('", path, "', .libPaths()))\n", file = "~/.Rprofile", sep = "", append = TRUE)
       shell: Rscript {0}
@@ -40,8 +45,7 @@ runs:
       # if: inputs.needsJAGS && runner.os == 'macOS'
       run: |
         echo $
-        if [ ${{ inputs.needsJAGS }} == 'true' && ${{ runner.os }} == 'macOS']
-        then
+        if [ "${{ inputs.needsJAGS }}" = 'true' && "${{ runner.os }}" = 'macOS']; then
           rm '/usr/local/bin/gfortran'
           brew install jags
         fi
@@ -63,6 +67,3 @@ runs:
         jaspTools::setupJaspTools()
       shell: Rscript {0}
 
-    - name: Run unit tests
-      run: source("tests/testthat.R")
-      shell: Rscript {0}
