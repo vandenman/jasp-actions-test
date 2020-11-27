@@ -1,10 +1,10 @@
 #!/bin/bash
 
-runner.os=$1
+os=$1
 needsJAGS=$2
-echo "runner.os = $runner.os"
+echo "runner.os = $os"
 echo "needsJAGS = $needsJAGS"
 
-if [ "${runner.os}" = 'macOS']; then
+if [ "$os" = 'macOS']; then
   brew cask install xquartz
 fi
