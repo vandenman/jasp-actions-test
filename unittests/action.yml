@@ -1,9 +1,9 @@
 name: 'set up unittests'
 description: 'downloads and installs R packages and system dependencies. Only works for Windows and macOS'
 inputs:
-  needsJAGS:
+  requiresJAGS:
     description: 'Should JAGS be available?'
-    required: true
+    required: false
     default: false
 
 runs:
