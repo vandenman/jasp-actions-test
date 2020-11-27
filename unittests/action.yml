@@ -1,12 +1,6 @@
 name: 'Hello World'
 description: 'Greet someone'
 inputs:
-  jaspRequiredFilesBranch:
-    description: 'Branch for jasp-stats/jasp-required-files'
-    required: true
-  libPath:
-    description: 'Location of packages on jasp-stats/jasp-required-files branch'
-    required: true
   needsJAGS:
     description: 'Should JAGS be available?'
     required: true
