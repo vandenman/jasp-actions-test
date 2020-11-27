@@ -1,3 +1,3 @@
 # jasp-actions
 
-playing ground for custom jasp-actions
+centralized location for custom jasp-actions
